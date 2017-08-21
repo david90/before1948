@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Before 1948 - Private buildings in Hong Kong that built before 1948.</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: new google.maps.LatLng(2.8,-187.3),
+          mapTypeId: google.maps.MapTypeId.HYBRID
+        });
+
+        // Load JSON Data
+        var url = 'https://apitable.skygeario.com/api/tables?id=15414c95-a675-4dec-b29e-165dde8ee59d&token=b08437ae-20f9-4fac-a9d5-a8a0a5565ed8&limit=999';
+
+        const hotelMarkers = load(url, function(hotelMarkers){
+          // Initialize Google Markers
+
+          var bounds  = new google.maps.LatLngBounds();
+          for(hotel of hotelMarkers.table.records) {
+            console.log(hotel)
+
+            let marker = new google.maps.Marker({
+              map: map,
+              position: new google.maps.LatLng(hotel.lat, hotel.long),
+              title: hotel.name,
+              icon: './location_24x24.png'
+            });
+            loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+            bounds.extend(loc);
+
+            var contentString = '<div id="content">'+
+                '<div id="siteNotice">'+
+                '</div>'+
+                '<h3 id="firstHeading" class="firstHeading">'+hotel.name+'</h3>'+
+                '<h5 id="firstHeading">('+hotel.yearbuilt+')</h5>'+
+                '<div id="bodyContent">'+
+                '<p>'+hotel.detail+'</p>'+
+                '</div>'+
+                '</div>';
+
+                var infowindow = new google.maps.InfoWindow({
+                  content: contentString
+                });
+
+                marker.bubble = infowindow;
+
+                marker.addListener('click', function() {
+                  console.log(this.bubble);
+                  this.bubble.open(map, this);
+                });
+          }
+
+          map.fitBounds(bounds);
+          map.panToBounds(bounds);
+        });
+      }
+
+      function loadJSON(file, callback) {
+          var xobj = new XMLHttpRequest();
+          xobj.overrideMimeType("application/json");
+          xobj.open('GET', file, true); // Replace 'my_data' with the path to your file
+          xobj.onreadystatechange = function () {
+                if (xobj.readyState == 4 && xobj.status == "200") {
+                  // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+                  callback(xobj.responseText);
+                }
+          };
+          xobj.send(null);  
+       }
+
+      function load(url, cb) {
+          loadJSON(url, function(response) {
+              var actual_JSON = JSON.parse(response);
+              console.log(actual_JSON);
+              cb(actual_JSON);
+          });
+      }
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDADR7plVDxh1joiY3d9XH-5MgYEOYqaHQ&callback=initMap">
+    </script>
+  </body>
+</html>
