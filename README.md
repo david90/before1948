@@ -1,11 +1,11 @@
 # Before 1948
-[Google Maps]([Demo](https://david90.github.io/before1948)) listing out private buildings in Hong Kong that built before 1948.
+[Google Maps]([Demo](https://david90.github.io/before1948/)) listing out private buildings in Hong Kong that built before 1948.
 
 ## Features
 
 Using Google Maps API and [APITable](https://apitable.co) for a simple demo.
 
-[Demo Map](https://david90.github.io/before1948)
+[Demo Map](https://david90.github.io/before1948/)
 
 * Single page example. No external framework besides [Google Maps API](https://developers.google.com/maps/)
 
